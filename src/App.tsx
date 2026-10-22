@@ -139,8 +139,27 @@ function textQuality(text: string, minimumWords = 15): { ok: boolean; reason: st
   const vowels = (normalized.match(/[aeiouáàâãéêíóôõúü]/gi) ?? []).length
   const letters = (normalized.match(/[a-záàâãéêíóôõúüç]/gi) ?? []).length
   if (letters < 1 || vowels / letters < 0.25) return { ok: false, reason: 'O texto parece conter uma sequência de caracteres, não uma resposta compreensível. Escreva em frases completas.', words }
-  const sentences = normalized.split(/[.!?;\n]+/).map((part) => part.trim()).filter(Boolean)
-  if (sentences.length === 1 && words.length >= 25 && !/[,:]/.test(normalized)) return { ok: false, reason: 'Organize a resposta em frases completas, separando sua tese e as razões que a sustentam.', words }
+
+  const sentences = normalized
+    .split(/[.!?]+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (
+    sentences.length === 1 &&
+    words.length > 25 &&
+    !/[.!?]/.test(normalized)
+  ) {
+    return {
+      ok: false,
+      reason: 'Organize a resposta em frases completas, separando sua tese e as razões que a sustentam.',
+      words,
+    };
+  }
+
+  return { ok: true, reason: '', words };
+}
+
   return { ok: true, reason: '', words }
 }
 
