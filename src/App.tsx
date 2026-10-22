@@ -160,9 +160,6 @@ function textQuality(text: string, minimumWords = 15): { ok: boolean; reason: st
   return { ok: true, reason: '', words };
 }
 
-  return { ok: true, reason: '', words }
-}
-
 function assessableText(text: string, minimumWords = 15): boolean {
   return textQuality(text, minimumWords).ok
 }
